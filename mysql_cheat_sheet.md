@@ -33,32 +33,32 @@ SELECT User, Host FROM mysql.user;
 ## Create User
 
 ```sql
-CREATE USER 'someuser'@'localhost' IDENTIFIED BY 'somepassword';
+CREATE USER 'user_name'@'localhost' IDENTIFIED BY 'password_name';
 ```
 
 ## Grant All Priveleges On All Databases
 
 ```sql
-GRANT ALL PRIVILEGES ON * . * TO 'someuser'@'localhost';
+GRANT ALL PRIVILEGES ON * . * TO 'user_name'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
 ## Show Grants
 
 ```sql
-SHOW GRANTS FOR 'someuser'@'localhost';
+SHOW GRANTS FOR 'user_name'@'localhost';
 ```
 
 ## Remove Grants
 
 ```sql
-REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'someuser'@'localhost';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'user_name'@'localhost';
 ```
 
 ## Delete User
 
 ```sql
-DROP USER 'someuser'@'localhost';
+DROP USER 'user_name'@'localhost';
 ```
 
 ## Exit
