@@ -336,8 +336,76 @@ SELECT age, COUNT(age) FROM users GROUP BY age HAVING count(age) >=2;
 
 ```sql
 SHOW WARNINGS;
+SHOW COUNT(*) WARNINGS;
+SHOW ERROR;
+SHOW COUNT(*) ERRORS;
 
 ```
+
+
+## INSERT DATE
+
+```sql
+
+CREATE TABLE correct_date (
+kolom_date DATE
+);
+
+INSERT INTO customer
+values
+('Andre','Rizaldi','1996@1@15');
+
+INSERT INTO customer
+values
+('Andre','Rizaldi','1996-1-15');
+
+INSERT INTO customer
+values
+('Andre','Rizaldi','19960115');
+
+```
+
+
+## INSERT TIME
+
+```sql
+
+CREATE TABLE correct_time (
+kolom_time TIME
+);
+
+INSERT INTO order
+values
+(1, 'Andre','21:00:00');
+
+INSERT INTO order
+values
+(2, 'Andre','210000');
+
+
+```
+
+
+
+## INSERT DATETIME / TIMESTAMP
+
+```sql
+
+CREATE TABLE correct_timestamp (
+kolom_timestamp timestamp
+);
+
+INSERT INTO order
+values
+(1,'Andre','1996-01-15 20:30:30.59');
+
+
+```
+
+
+
+
+
 
 
 
