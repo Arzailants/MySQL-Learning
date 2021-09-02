@@ -403,9 +403,38 @@ values
 ```
 
 
+## CASE DI DALAM CASE
+
+``` sql
+
+select first_name, birth_date,
+case city
+	when 'Waltham' then
+		case birth_date
+			when '1986-03-28' then 'Older Waltham'
+            else 'Young Waltham' end 
+	when 'Hampton' then
+		case birth_date
+			when '1986-04-13' then 'Older Hampton'
+            else 'Young Hampton' end
+	when 'Orlando' then
+		case birth_date
+			when '1974-04-14' then 'Older Orlando'
+            else 'Young Orlando' end
+else city
+end as new_colomn
+from customers;
+
+```
+
+
+## CONCAT
+
+```sql
 
 
 
 
 
 
+y
