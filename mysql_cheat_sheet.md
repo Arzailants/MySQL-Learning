@@ -433,8 +433,263 @@ from customers;
 ```sql
 
 
+```
 
 
 
 
-y
+## ALIAS
+```sql
+NOT ALLOWED
+
+SELECT CUSTOMER AS C, C * 10;
+
+
+```
+
+
+## CONCAT
+```sql
+
+SELECT PLAYERNO, CONCAT(LEFT(INITIAL,1), '. ', NAME) AS FULL_NAME
+FROM PLAYERS
+WHERE LEFT(NAME,1) = 'B';
+
+```
+
+
+
+## COALESCE
+```sql
+
+SELECT INITIAL, NAME, COALESCE(LEAGUENO, '1')
+FROM PLAYERS
+WHERE Town = 'Straford';
+
+```
+
+
+## CASTING
+
+```sql
+
+SELECT	CONCAT(NAMA, CAST(tgl_lahir as char(10)))
+FROM	data_pribadi;
+
+```
+
+
+## INTERVAL DATE
+
+```sql
+
+SELECT	first_name, last_name, birth_date
+FROM	customers
+WHERE	birth_date >= '1985-02-01'
+AND	birth_date <= '1985-02-01' + INTERVAL 4 DAY + INTERVAL 6 DAY;
+
+RESULT :
++------------+-----------+------------+
+| first_name | last_name | birth_date |
++------------+-----------+------------+
+| Freddi     | Boagey    | 1985-02-07 |
++------------+-----------+------------+
+
+```
+
+
+## ADD TIME
+
+```sql
+
+SELECT	MATCHNO,
+	START_TIME,
+	ADDTIME(START_TIME, '01:00:00')
+FROM	MATCHES_SPECIAL;
+
+The result is:
+MATCHNO START_TIME ADDTIME(START_TIME, '01:00:00')
+------- ---------- -------------------------------
+1 14:10:12 15:10:12
+2 17:00:00 18:00:00
+
+
+```
+
+
+```sql
+
+SELECT	MATCHNO,
+	END_TIME
+FROM 	MATCHES_SPECIAL
+WHERE	ADDTIME(END_TIME, '01:00:00') = '17:50:09';
+
++---------+----------+
+| matchNO | end_time |
++---------+----------+
+|       1 | 16:50:09 |
++---------+----------+
+1 row in set (0.00 sec)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## CORETAN
+```sql
+
+SELECT	PLAYERNO,
+	DAYNAME(BIRTH_DAT),
+	MONTHNAME(BIRTH_DATE),
+	DAYOFYEAR(BIRTH_DATE)
+FROM	PLAYERS
+WHERE	PLAYERNO < 10;
+
+```
+
+
+```sql
+
+SELECT	PLAYERNO,
+	BIRTH_DATE,
+	ADDDATE(BIRTH_DATE, INTERVAL 7 DAYS)
+FROM 	PLAYERS
+WHERE	DAYNAME(BIRTH_DATE) = 'Saturday';
+
+```
+
+
+```sql
+
+SELECT	PLAYERNO,
+	BEGIN_DATE,
+	END_DATE,
+	DATEDIFF(END_DATE, BEGIN_DATE)
+FROM	COMMITTEE_MEMBERS
+WHERE	DATEDIFF(END_DATE, BEGIN_DATE) > 500
+OR	(END_DATE IS NULL AND DATEDIFF(CURRENT_DATE, BEGIN_DATE) > 500)
+ORDER BY  PLAYERNO;
+
+Explanation: The DATEDIFF function calculates the difference in days between
+two dates or timestamps. The second condition has been added to find those committee members who still hold the position (the ones that have a null value as
+END_DATE). Every day, this statement can have another result, of course
+
+```
+
+
+```sql
+
+SELECT	Id_bin,
+	nama,
+	DAYNAME(tgl_lahir) as hari,
+	MONTHNAME(tgl_lahir) as bulan,
+	DAYOFYEAR(tgl_lahir) as tahun
+FROM 	data_pribadi
+ORDER BY nama;
+
+```
+
+
+```sql
+
+INI BUAT APA ?
+
+SET @@SQL_MODE= 'PIPES_AS_CONCAT'
+
+```
+
+
+```sql
+
+SELECT	id_payment,
+	payment_Date
+FROM 	penalties
+WHERE	payment_date >= '1982-12-25'
+AND	payment_date <= '1982-12-25' + INTERVAL 6 DAY
+
+
+The result is:
+PAYMENTNO PAYMENT_DATE
+--------- ------------
+7 1982-12-30
+
+
+Interval literals can be
+added to dates only
+For example, MySQL rejects the expression DATE + (INTERVAL
+1 YEAR + INTERVAL 20 DAY).
+
+
+```
+
+
+```sql
+
+MENYIMPAN DATA KEDALAM VARIABLE @
+
+// MEMBUAT TABLE
+CREATE TABLE	dataTimeStamp ( colomn1 TIMESTAMP );
+
+// SET NILAI, KEDALAM @TIMEX_SAVE VARIABLE
+SET @TIMEX_SAVE = TIMESTAMP('1996-01-15 18:00:00');
+
+// MEMASUKKAN DATA KE DALAM TABLE dataTimeStamp
+INSERT INTO dataTimeStamp
+values (@TIME);
+
+// MENAMPILKAN TABLE dataTimeStamp
+SELECT * FROM dataTimeStamp;
+
+```
+
+
+```sql
+
+SELECT 	CUSTOMER_ID
+CASE	CUSTOMER_ID > 5
+WHEN	0
+THEN	'Less than 6'
+ELSE	'Greater than 5'
+END AS value,
+customer_id > 5
+FROM customers;
+
+```
+
+
+
+
+
+
+
