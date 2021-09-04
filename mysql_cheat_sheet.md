@@ -687,7 +687,91 @@ FROM customers;
 
 ```
 
+```sql
 
+Example 5.55: Get the numbers of the players who live on Haseltine Lane in Stratford.
+
+SELECT 	PLAYERNO
+FROM 	PLAYERS
+WHERE (TOWN, STREET) = ('Stratford', 'Haseltine Lane')
+
+
+The result is:
+PLAYERNO
+--------
+6
+100
+
+```
+
+
+
+```sql
+
+Example 5.55: Get the numbers of the players who live on Haseltine Lane in Stratford.
+
+SELECT 	PLAYERNO
+FROM 	PLAYERS
+WHERE 	(TOWN, STREET) = (SELECT 'Stratford', 'Haseltine Lane')
+
+
+The result is:
+PLAYERNO
+--------
+6
+100
+
+```
+
+```sql
+
+Explanation: You can specify this statement without brackets; the result is the
+same. However, you also can formulate the statement as follows:
+
+(((((SELECT *
+FROM TEAMS)))))
+
+```
+
+
+## ORDER BY HARUS DIBELAKANG
+```sql
+
+// INI SALAH KARENA ORDER BY TIDAK DIBELAKANG
+
+SELECT 	PLAYERNO
+FROM 	TEAMS
+ORDER	BY PLAYERNO
+UNION ALL
+SELECT 	PLAYERNO
+FROM 	PENALTIES
+
+
+// SEHARUSNYA
+
+SELECT 	PLAYERNO
+FROM 	TEAMS
+UNION
+SELECT 	PLAYERNO
+FROM 	PENALTIES 
+ORDER 	BY PLAYERNO
+
+
+If you want to sort the intermediate result of a select block before it is linked
+with a UNION operator, you must use brackets. Therefore, the following statement is
+allowed:
+
+((SELECT PLAYERNO
+FROM 	TEAMS
+ORDER 	BY PLAYERNO))
+UNION
+((SELECT PLAYERNO
+FROM 	PENALTIES))
+ORDER 	BY PLAYERNO
+
+
+
+```
 
 
 
