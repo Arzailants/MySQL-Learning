@@ -535,30 +535,275 @@ WHERE	ADDTIME(END_TIME, '01:00:00') = '17:50:09';
 
 
 
+## SUBQUERY
+
+```sql
+
+Example 6.7: Get the numbers of the players who have a number greater than 10
+and less than 100, for whom the year in which they joined the club is greater than
+1980 and who are male.
+
+SELECT 	PLAYERNO
+FROM 	(SELECT PLAYERNO, SEX
+FROM 	(SELECT PLAYERNO, SEX, JOINED
+FROM 	(SELECT PLAYERNO, SEX, JOINED
+FROM 	PLAYERS
+WHERE 	PLAYERNO > 10) AS GREATER10
+WHERE 	PLAYERNO < 100) AS LESS100
+WHERE 	JOINED > 1980) AS JOINED1980
+WHERE	SEX = 'M'
+
+
+The result is:
+PLAYERNO
+--------
+57
+83
+
+
+Explanation: This statement has four levels. The inner subquery is used to
+search for all the players whose player number is greater than 10:
+
+PLAYERNO SEX JOINED
+------- ---- ------
+27 F 1983
+28 F 1983
+39 M 1980
+44 M 1980
+57 M 1985
+83 M 1982
+95 M 1972
+100 M 1979
+104 F 1984
+112 F 1984
+
+The next subquery is used to retrieve from the previous intermediate result all
+the rows in which the player number is less than 100:
+
+PLAYERNO SEX JOINED
+-------- --- ------
+27 F 1983
+28 F 1983
+39 M 1980
+44 M 1980
+57 M 1985
+83 M 1982
+95 M 1972
+
+The third subquery is used to search the intermediate result for all the rows of
+which the year of joining the club is greater than 1980. Also the JOINED column is
+not included in the intermediate result because the table expression on top does not
+need it. The intermediate result is: 
+
+
+PLAYERNO SEX
+-------- ---
+27 F
+28 F
+57 M
+83 M
+
+
+Finally, this intermediate result is searched for the rows in which the SEX column is equal to M
+
+
+```
+
+```sql
+
+Example 6.11: Get the numbers of the players who have the same sex as and live
+in the same town as player 100.
+
+
+SELECT 	PLAYERNO
+FROM 	PLAYERS
+WHERE 	(SEX, TOWN) = (SELECT SEX, TOWN
+FROM 	PLAYERS
+WHERE PLAYERNO = 100)
+The result is:
+PLAYERNO
+--------
+2
+6
+7
+39
+57
+83
+100
+
+
+```
+
+
+```sql
+
+SELECT 	PLAYERNO
+FROM 	(SELECT PLAYERNO, SEX 
+	FROM PLAYERS
+	WHERE PLAYERNO < 10) AS PLAYERS10
+WHERE 	SEX = 'M'
+The result is:
+PLAYERNO
+--------
+2
+6
+7
+
+```
+
+
+
+## KOLOM SPECIFICATION
+
+```sql
+
+// MEMANGGIL KOLOM YANG DITUJU
+
+SELECT 	<nama_table>.<nama_kolom>
+FROM	<nama_table>
+
+SELECT 	cities.cityName
+FROM 	cities;
+
+
+// MEMANGGIL KOLOM YANG DITUJU, DENGAN MENYERTAKAN NAMA DATABASE, TABLE, LALU KOLOM
+
+SELECT	<nama_database>.<nama_table>.<nama_kolom>
+FROM	<nama_table>
+
+SELECT	book.cities.cityName
+FROM	cities;
+
+
+```
 
 
 
 
+## MULTIPLE TABLE USE FROM
+
+```sql
+
+// MENGGUNAKAN MANUAL
+
+SELECT 	<nama_kolom>, <nama_kolom>
+FROM 	<nama_table1>, <nama_table2>
+WHERE 	<fk_table1> = <fk_table2>
+
+
+SELECT	first_name,
+	order_id
+FROM 	customers,
+	orders
+WHERE 	customers.customer_id = orders.customer_id;
+
+
+```
+
+```sql
+
+SELECT 	PAYMENTNO,
+	PENALTIES.PLAYERNO,
+	AMOUNT,
+	NAME,
+	INITIALS
+FROM 	PENALTIES,
+	PLAYERS
+WHERE 	PENALTIES.PLAYERNO = PLAYERS.PLAYERNO
+
+
+The end result is:
+PAYMENTNO PLAYERNO AMOUNT 	NAME 		INITIALS
+--------- -------- ------ 	--------- 	--------
+1	  6  	   100.00 	Parmenter 	R
+2 	  44 	   75.00 	Baker 		E
+3 	  27 	   100.00 	Collins 	DD
+4 	  104 	   50.00 	Moorman 	D
+5 	  44 	   25.00 	Baker 		E
+6 	  8 	   25.00 	Newcastle 	B
+7 	  44 	   30.00 	Baker 		E
+8 	  27 	   75.00 	Collins 	DD
+
+```
 
 
 
+## PENGGABUNGAN 3 TABLE DENGAN FROM
+
+```sql
+
+SELECT 	MATCHNO, PLAYERNO, TEAMNO, NAMA, DIVISION
+FROM	MATCHES, PLAYERS, TEAMS
+WHERE	MATCHES.PLAYERNO = PLAYERS.PLAYERNO
+AND	MATCHES.TEAMNO = TEAMS.TEAMNO;
 
 
 
+SELECT 	M.MATCHNO, M.PLAYERNO, M.TEAMNO, P.NAMA, T.DIVISION
+FROM	MATCHES M, PLAYERS P, TEAMS T
+WHERE 	M.PLAYERNO = P.PLAYERNO
+AND	M.TEAMNO = T.TEAMNO;
 
 
+```
 
 
+## GABUNG TABLE
+```sql
+
+Example 7.12: Get the payment number, the player number, and the date of
+each penalty incurred in the year in which the player concerned joined the club.
+
+SELECT 	PEN.PAYMENTNO,
+	PEN.PLAYERNO,
+	PEN.PAYMENT_DATE
+FROM 	PENALTIES AS PEN,
+	PLAYERS AS P
+WHERE 	PEN.PLAYERNO = P.PLAYERNO
+AND 	YEAR(PEN.PAYMENT_DATE) = P.JOINED
 
 
+'The result is:
+PAYMENTNO PLAYERNO PEN.PAYMENT_DATE
+--------- -------- ----------------
+3 27 1983-09-10
+4 104 1984-12-08
+5 44 1980-12-08
+6 8 1980-12-08
 
 
+```
 
 
+## GABUNG 2 TABLE, DI DATABAE BERBEDA
+```sql
+
+Example 7.14: Link the PLAYERS table to the CITIES table from the EXTRA
+database.
+
+SELECT 	P.PLAYERNO
+FROM 	PLAYERS AS P,
+	EXTRA.CITIES AS TOWN
+WHERE 	P.TOWN = TOWN.CITYNAME
 
 
+The result is:
+PLAYERNO
+--------
+2
+6
+7
+8
+39
+44
+57
+83
+100
 
 
+Explanation: The CITIES table is qualified with the EXTRA database. This statement does not change the current database.
+
+```
 
 
 
