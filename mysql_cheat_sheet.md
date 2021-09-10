@@ -806,8 +806,186 @@ Explanation: The CITIES table is qualified with the EXTRA database. This statem
 ```
 
 
+## LIKE
+```sql
+
+SELECT	NAMA,
+	TOWN,
+	PLAYERNO
+FROM	PLAYERS
+WHERE 	NAMA
+LIKE
+CONCAT	('%', SUBSTR(TOWN,3,1));
+
+```
 
 
+## LIKE 2
+```sql
+
+SELECT	NAMA,
+	PLAYERNO
+FROM	PLAYERS
+WHERE	NAME
+LIKE	'%#_%'
+ESCAPE	'#';
+
+```
+
+
+
+## REGEXP
+```sql
+
+Example 8.48: Get the name and the number of each player who has the small
+letter e in his or her name.
+
+
+SELECT NAME, PLAYERNO
+FROM PLAYERS
+WHERE NAME REGEXP 'e';
+
+
+The result is:
+
+NAME 		PLAYERNO
+--------- 	--------
+Everett 	2
+Parmenter 	6
+Wise 		7
+Newcastle 	8
+Baker 		44
+Hope 		83
+Miller 		95
+Parmenter 	100
+Bailey 		112
+ 
+
+```
+
+
+
+## REGEXP 2
+```sql
+
+Example 8.49: Get the name and number of each player whose name begins with
+the letter combination ba.
+
+SELECT 	NAME,
+	PLAYERNO
+FROM 	PLAYERS
+WHERE 	NAME 
+REGEXP 	'^ba'
+
+
+The result is:
+NAME 	PLAYERNO
+------ 	--------
+Baker 	44
+Bailey 	112
+
+```
+
+
+## REGEXP 3
+```sql
+
+Example 8.50: Get the name, the street, and the number of each player whose
+name ends with the same letter as the first letter of his or her street.
+
+SELECT 	NAME,
+	STREET,
+	PLAYERNO
+FROM 	PLAYERS
+WHERE 	NAME
+REGEXP 	CONCAT(SUBSTR(STREET,1,1), '$')
+
+
+The result is:
+NAME 	STREET 		PLAYERNO
+-------	-------------	--------
+Wise 	Edgecombe Way 	7
+
+
+```
+
+
+## REGEXP 4
+```sql
+
+Example 8.51: Get the name and number of each player whose name contains
+the letters a, b, or c.
+
+SELECT 	NAME,
+	PLAYERNO
+FROM 	PLAYERS
+WHERE 	NAME
+REGEXP 	'[abc]'
+
+
+The result is:
+NAME 		PLAYERNO
+-------		----------
+Parmenter 	6
+Newcastle 	8
+Collins 	27
+Collins 	28
+Bishop 		39
+Baker 		44
+Brown 		57
+Parmenter 	100
+Moorman 	104
+Bailey 		112
+
+```
+
+
+## REGEXP
+```sql
+
+Example 8.52: Get the name and the number of each player whose name consists of the pattern m.n. The point can be any random character.
+
+SELECT 	NAME,
+	PLAYERNO
+FROM 	PLAYERS
+WHERE 	NAME
+REGEXP 	'm.n';
+
+
+The result is:
+
+NAME 	   PLAYERNO
+---------  --------
+Parmenter  6
+Parmenter  100
+Moorman    104
+
+
+```
+
+
+
+## REGEXP
+```sql
+
+Example 8.53: Get the name and number of each player whose name consists of
+the letters m, e, or n, followed again by m, e, or n.
+
+SELECT 	NAME,
+	PLAYERNO
+FROM 	PLAYERS
+WHERE 	NAME
+REGEXP 	'[men][men]'
+
+
+The result is:
+NAME 	   PLAYERNO
+---------  --------
+Parmenter  6
+Newcastle  8
+Parmenter  100
+
+```
 
 
 
